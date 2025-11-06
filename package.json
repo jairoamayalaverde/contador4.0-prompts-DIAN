@@ -1,0 +1,21 @@
+{
+  "name": "contador4-prompts-dian",
+  "version": "1.0.0",
+  "description": "Generador de 30 prompts especializados en DIAN para contadores y revisores fiscales",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build completed'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "DIAN",
+    "contadores",
+    "colombia",
+    "tributario",
+    "prompts",
+    "IA"
+  ],
+  "author": "Jairo Amaya",
+  "license": "MIT"
+}
