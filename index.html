@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>🏛️ Generador de Prompts DIAN - Contador 4.0</title>
     <meta name="description" content="Generador automático de 30 prompts especializados en DIAN para contadores colombianos">
     <style>
         /* ---------- Reset y básicos ---------- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root{
+            --bg-grad-1: #667eea;
+            --bg-grad-2: #764ba2;
+            --accent-blue: #2ea8ff;
+            --success: #2ecc71;
+            --muted: #6b7280;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg,#667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #2c3e50;
+            color: #243b55;
+            -webkit-font-smoothing:antialiased;
         }
         .container { max-width: 1200px; margin: 0 auto; }
 
@@ -26,30 +34,30 @@
             text-align: center;
             margin-bottom: 30px;
         }
-        .header h1 { font-size: 2.6rem; color: #243b55; margin-bottom: 8px; }
-        .header .subtitle { color: #7f8c8d; font-size: 1.05rem; }
+        .header h1 { font-size: clamp(1.4rem, 2.6vw, 2.6rem); color: #243b55; margin-bottom: 8px; }
+        .header .subtitle { color: #7f8c8d; font-size: 1.02rem; }
 
         /* ---------- Upload / Secret Section (mismo lugar) ---------- */
         .upload-section {
             background: white;
-            padding: 36px;
+            padding: 28px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .upload-zone {
             border: 3px dashed #3498db;
             border-radius: 15px;
-            padding: 44px;
+            padding: 36px;
             cursor: default;
             background: #f8f9fa;
             transition: all .25s;
             max-width: 900px;
             margin: 0 auto;
         }
-        .upload-zone.small { padding: 28px; }
+        .upload-zone.small { padding: 20px; }
 
         .upload-icon {
             width: 72px;
@@ -64,18 +72,21 @@
             width: 70%;
             max-width: 520px;
             padding: 14px 16px;
-            margin: 18px auto 8px;
+            margin: 14px auto 8px;
             border-radius: 10px;
             border: 2px solid #e6eefc;
             background: #f7fbff;
             outline: none;
             font-size: 1rem;
             text-align: center;
-            color: #2c3e50;
+            color: #243b55;
+            transition: box-shadow .18s, transform .12s;
         }
         .secret-input:focus {
-            border-color: #2ecc71;
+            border-color: var(--success);
             background: #eefaf4;
+            box-shadow: 0 6px 20px rgba(46,204,113,0.08);
+            transform: translateY(-1px);
         }
 
         .btn {
@@ -90,7 +101,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg,#667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg,var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
             color: #fff;
         }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(102,126,234,0.25); }
@@ -113,24 +124,22 @@
             margin-bottom: 30px;
         }
 
-        .info-top { text-align:center; margin-bottom: 24px; }
-        .info-top h2 { font-size: 2.1rem; color: #2b3b50; margin-bottom: 8px; }
-        .info-top p { color: #666; max-width: 900px; margin: 0 auto; line-height: 1.6; }
-
+        .info-top { text-align:center; margin-bottom: 18px; }
+        .info-top h3 { font-size: clamp(1rem, 1.6vw, 1.25rem); color: #2b3b50; margin-bottom: 8px; line-height:1.4; }
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
-            margin-top: 26px;
+            margin-top: 18px;
         }
         .card {
             background: #f0f6ff;
-            padding: 22px;
+            padding: 18px;
             border-radius: 14px;
             box-shadow: 0 6px 18px rgba(0,0,0,0.04);
         }
-        .card h3 { color: #5b7ce6; margin-bottom: 12px; font-size: 1.15rem; }
-        .card ul { list-style: none; color: #374151; line-height: 1.9; }
+        .card h3 { color: #5b7ce6; margin-bottom: 10px; font-size: 1.05rem; }
+        .card ul { list-style: none; color: #374151; line-height: 1.8; }
 
         /* ---------- Results section & filters ---------- */
         .results-section {
@@ -141,66 +150,110 @@
 
         .results-banner {
             background: #e8f5e9;
-            padding: 28px;
+            padding: 20px;
             border-radius: 14px;
             text-align: center;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             box-shadow: 0 8px 22px rgba(0,0,0,0.06);
         }
-        .results-banner h2 { color: #2e7d32; font-size: 1.6rem; margin-bottom:6px; }
+        .results-banner h2 { color: #2e7d32; font-size: 1.25rem; margin-bottom:6px; }
 
         .category-filters {
             background: white;
-            padding: 18px;
+            padding: 14px;
             border-radius: 14px;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             box-shadow: 0 8px 22px rgba(0,0,0,0.06);
             text-align:center;
         }
         .filter-btn {
             display:inline-block;
-            padding: 10px 20px;
+            padding: 8px 18px;
             margin: 6px;
             border-radius: 28px;
-            border: 2px solid #2ea8ff;
+            border: 2px solid var(--accent-blue);
             background: white;
-            color: #2ea8ff;
+            color: var(--accent-blue);
             font-weight: 700;
             cursor: pointer;
             transition: all .18s;
+            font-size: 0.95rem;
         }
-        .filter-btn.active { background: #2ea8ff; color: white; box-shadow: 0 6px 20px rgba(46,168,255,0.14); }
+        .filter-btn.active { background: var(--accent-blue); color: white; box-shadow: 0 6px 20px rgba(46,168,255,0.14); }
         .filter-btn:hover { transform: translateY(-3px); }
 
         .actions-row {
             text-align:center;
-            padding: 20px 0 10px 0;
-            margin-bottom: 18px;
+            padding: 12px 0 6px 0;
+            margin-bottom: 12px;
         }
 
         .prompts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-            gap: 20px;
+            gap: 16px;
         }
         .prompt-card {
             background: white;
-            padding: 22px;
+            padding: 16px;
             border-radius: 12px;
             box-shadow: 0 8px 22px rgba(0,0,0,0.06);
             transition: transform .18s;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
         }
         .prompt-card:hover { transform: translateY(-6px); }
-        .prompt-category { display:inline-block; padding:6px 12px; border-radius:20px; font-weight:700; margin-bottom:12px; }
+        .prompt-category { display:inline-block; padding:6px 12px; border-radius:20px; font-weight:700; margin-bottom:12px; font-size:0.9rem; }
         .category-dian { background:#e3f2fd; color:#1976d2; }
         .category-vencimientos { background:#fff3e0; color:#f57c00; }
         .category-obligaciones { background:#f3e5f5; color:#7b1fa2; }
 
-        .prompt-title { font-weight:800; margin-bottom:8px; color:#243b55; }
-        .prompt-text { color:#4b5563; line-height:1.65; margin-bottom:12px; }
+        .prompt-title { font-weight:800; margin-bottom:8px; color:#243b55; font-size:1rem; }
+        .prompt-text { color:#4b5563; line-height:1.6; margin-bottom:10px; white-space:pre-wrap; }
 
-        .copy-btn { width:100%; padding:10px; border-radius:8px; border:none; font-weight:800; background:#2b83f6; color:white; cursor:pointer; }
-        .copy-btn.copied { background:#2ecc71; }
+        .copy-btn {
+            width:100%;
+            padding:10px;
+            border-radius:8px;
+            border:none;
+            font-weight:800;
+            background:#2b83f6;
+            color:white;
+            cursor:pointer;
+        }
+        .copy-btn.copied { background:var(--success); }
+
+        /* Prompt action row: Run in ChatGPT / Claude / Gemini */
+        .prompt-actions {
+            display:flex;
+            gap:8px;
+            margin-top:10px;
+            align-items:center;
+        }
+        .run-btn {
+            flex:1;
+            padding:8px 10px;
+            border-radius:8px;
+            border:none;
+            color:white;
+            font-weight:700;
+            cursor:pointer;
+            font-size:0.86rem;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            transition: transform .12s, opacity .12s;
+        }
+        .run-btn:hover { transform: translateY(-2px); opacity:0.95; }
+        .run-btn.chatgpt { background: #10a37f; } /* verde ChatGPT */
+        .run-btn.claude { background: #6b5b95; }  /* morado/oscuro Claude */
+        .run-btn.gemini { background: #4285f4; }  /* azul Google */
+
+        .run-icon {
+            width:16px; height:16px; display:inline-block;
+        }
 
         /* ---------- Footer ---------- */
         .footer {
@@ -216,6 +269,7 @@
         /* ---------- Progress ---------- */
         .progress-container {
             width: 360px;
+            max-width:92%;
             height: 8px;
             background: #e6eefc;
             border-radius: 6px;
@@ -225,18 +279,18 @@
         .progress-bar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg,#667eea,#764ba2);
+            background: linear-gradient(90deg,var(--bg-grad-1),var(--bg-grad-2));
             transition: width .5s ease;
         }
 
         /* Toast */
         .toast {
             position: fixed;
-            right: 30px;
-            bottom: 30px;
-            background: #2ecc71;
+            right: 18px;
+            bottom: 18px;
+            background: var(--success);
             color: white;
-            padding: 14px 18px;
+            padding: 12px 14px;
             border-radius: 8px;
             display: none;
             box-shadow: 0 8px 26px rgba(0,0,0,0.18);
@@ -244,12 +298,50 @@
         }
         .toast.show { display:block; }
 
-        /* Responsive */
-        @media (max-width:900px) {
-            .header h1 { font-size: 1.9rem; }
+        /* Responsive: ajustes móviles (compactar sección de acceso) */
+        @media (max-width: 900px) {
+            .header { padding: 24px 18px; }
+            .upload-section { padding: 20px; }
+            .info-section { padding: 20px; }
+            .cards { gap: 14px; }
             .progress-container { width: 260px; }
-            .secret-input { width: 92%; }
         }
+
+        @media (max-width: 520px) {
+            .upload-zone {
+                padding: 18px;
+                border-radius: 12px;
+                border-width: 2px;
+            }
+            .upload-zone.small { padding: 14px; }
+            .upload-icon { width:56px; height:56px; margin-bottom:10px; }
+            .header h1 { font-size:1.5rem; }
+            .secret-input {
+                width: 92%;
+                padding: 10px 12px;
+                margin: 10px auto 8px;
+                border-radius: 10px;
+                font-size: 0.98rem;
+            }
+            .btn { width: 82%; max-width: 260px; padding: 12px 18px; font-size: 0.98rem; }
+            .card { padding: 14px; }
+            .prompt-card { padding: 12px; }
+            .prompts-grid { gap: 12px; grid-template-columns: 1fr; }
+            .prompt-actions { flex-direction: row; gap:6px; }
+            .run-btn { font-size: 0.86rem; padding: 8px; }
+        }
+
+        /* small visual class for shake effect (incorrect key) */
+        @keyframes shakeX {
+            0%{ transform: translateX(0); }
+            20%{ transform: translateX(-6px); }
+            40%{ transform: translateX(6px); }
+            60%{ transform: translateX(-4px); }
+            80%{ transform: translateX(4px); }
+            100%{ transform: translateX(0); }
+        }
+        .shake { animation: shakeX .35s ease; }
+
     </style>
 </head>
 <body>
@@ -257,7 +349,7 @@
 
         <!-- HEADER -->
         <div class="header" id="header">
-            <h1>Generador Automático de Prompts DIAN</h1> 
+            <h1>Generador Automático de Prompts DIAN</h1>
         </div>
 
         <!-- UPLOAD SECTION | MISMO LUGAR: ahora campo secreto sin texto visible -->
@@ -363,7 +455,7 @@
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="toast">✓ Acción completada</div>
+    <div id="toast" class="toast" role="status" aria-live="polite">✓ Acción completada</div>
 
     <script>
         /****************************************************************
@@ -446,9 +538,9 @@
             } else {
                 // Clave incorrecta (mensaje sutil — no revelar cómo es)
                 secretFeedback.innerHTML = '<span style="color:#e67e22;font-weight:700;">✖ Clave incorrecta</span>';
-                // efectito leve
+                // efecto leve
                 secretInput.classList.add('shake');
-                setTimeout(()=> secretInput.classList.remove('shake'), 300);
+                setTimeout(()=> secretInput.classList.remove('shake'), 350);
             }
         }
 
@@ -460,7 +552,7 @@
         function startProcessing() {
             // Reemplazamos la zona por la animación de progreso (mantener el mismo contenedor)
             uploadSection.innerHTML = `
-                <div class="upload-zone small" style="padding:28px;">
+                <div class="upload-zone small" style="padding:20px;">
                     <div style="font-size:40px; margin-bottom:6px;">⏳</div>
                     <h3 style="color:#2c3e50;">Analizando E-book Contador 4.0</h3>
                     <p style="color:#6b7280; margin-top:6px;">Procesando contenido y generando prompts especializados...</p>
@@ -490,7 +582,7 @@
             setTimeout(() => {
                 // Restaurar un bloque final similar al visual original
                 uploadSection.innerHTML = `
-                    <div class="upload-zone small" style="padding:28px; background:#e8f5e9; border-radius:12px;">
+                    <div class="upload-zone small" style="padding:20px; background:#e8f5e9; border-radius:12px;">
                         <div style="font-size:48px; color:#2e7d32; margin-bottom:6px;">✔️</div>
                         <h3 style="color:#2e7d32; margin-bottom:6px;">¡Prompts Generados Exitosamente!</h3>
                         <p style="color:#374151;">Se han generado 30 prompts especializados a partir del E-book.</p>
@@ -521,12 +613,32 @@
                 const card = document.createElement('div');
                 card.className = 'prompt-card';
                 card.innerHTML = `
-                    <span class="prompt-category category-${p.category} ${p.category === 'dian' ? 'category-dian' : (p.category==='vencimientos' ? 'category-vencimientos':'category-obligaciones')}">
-                        ${getCategoryName(p.category)}
-                    </span>
-                    <div class="prompt-title">${escapeHtml(p.title)}</div>
-                    <div class="prompt-text">${escapeHtml(p.prompt)}</div>
-                    <button class="copy-btn" onclick="copyPrompt(${p.id}, this)">📋 Copiar Prompt</button>
+                    <div>
+                        <span class="prompt-category ${p.category === 'dian' ? 'category-dian' : (p.category==='vencimientos' ? 'category-vencimientos':'category-obligaciones')}">
+                            ${getCategoryName(p.category)}
+                        </span>
+                        <div class="prompt-title">${escapeHtml(p.title)}</div>
+                        <div class="prompt-text">${escapeHtml(p.prompt)}</div>
+                    </div>
+
+                    <div style="margin-top:12px;">
+                        <button class="copy-btn" onclick="copyPrompt(${p.id}, this)">📋 Copiar Prompt</button>
+
+                        <div class="prompt-actions" aria-hidden="false">
+                            <button class="run-btn chatgpt" title="Abrir en ChatGPT" onclick="openInChatGPT(${p.id})">
+                                <svg class="run-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20l9-7-9-7-9 7 9 7z"></path></svg>
+                                ChatGPT
+                            </button>
+                            <button class="run-btn claude" title="Abrir en Claude" onclick="openInClaude(${p.id})">
+                                <svg class="run-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="1.6"></circle></svg>
+                                Claude
+                            </button>
+                            <button class="run-btn gemini" title="Abrir en Gemini" onclick="openInGemini(${p.id})">
+                                <svg class="run-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.6"></rect></svg>
+                                Gemini
+                            </button>
+                        </div>
+                    </div>
                 `;
                 promptsGrid.appendChild(card);
             });
@@ -587,6 +699,28 @@
             showToast('✓ Archivo JSON descargado');
         }
 
+        // ====== Open in external chatbots (Nueva pestaña) ======
+        // Nota: las URLs usadas son las rutas públicas comunes para iniciar una consulta con el texto
+        // Algunas plataformas podrían requerir login o formatos distintos; aquí usamos el enfoque "q=" o "prompt=" por compatibilidad.
+        function openInChatGPT(id) {
+            const p = prompts.find(x => x.id === id);
+            if (!p) return;
+            const url = 'https://chat.openai.com/?q=' + encodeURIComponent(p.prompt);
+            window.open(url, '_blank', 'noopener');
+        }
+        function openInClaude(id) {
+            const p = prompts.find(x => x.id === id);
+            if (!p) return;
+            const url = 'https://claude.ai/new?prompt=' + encodeURIComponent(p.prompt);
+            window.open(url, '_blank', 'noopener');
+        }
+        function openInGemini(id) {
+            const p = prompts.find(x => x.id === id);
+            if (!p) return;
+            const url = 'https://gemini.google.com/app?prompt=' + encodeURIComponent(p.prompt);
+            window.open(url, '_blank', 'noopener');
+        }
+
         // small helper to avoid XSS if algún prompt contuviera caracteres especiales
         function escapeHtml(str){
             return String(str).replace(/[&<>"'`=\/]/g, function(s) {
@@ -608,8 +742,8 @@
             }
         });
 
-        // ====== Inicial: si el usuario ya quiere ver algo en consola (debug leve) ======
-        console.log('Generador Prompts DIAN iniciado (modo secreto activador).');
+        // ====== Inicial: console message ======
+        console.log('Generador Prompts DIAN (versión con run-buttons y mobile optimizado) iniciado.');
 
     </script>
 </body>
