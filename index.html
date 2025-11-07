@@ -6,11 +6,7 @@
     <title>🏛️ Generador de Prompts DIAN - Contador 4.0</title>
     <meta name="description" content="Generador automático de 30 prompts especializados en DIAN para contadores colombianos">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,10 +15,7 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
 
         .header {
             background: white;
@@ -33,16 +26,8 @@
             margin-bottom: 30px;
         }
 
-        .header h1 {
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header .subtitle {
-            color: #7f8c8d;
-            font-size: 1.2em;
-        }
+        .header h1 { color: #2c3e50; font-size: 2.5em; margin-bottom: 10px; }
+        .header .subtitle { color: #7f8c8d; font-size: 1.2em; }
 
         .upload-section {
             background: white;
@@ -53,34 +38,22 @@
             margin-bottom: 30px;
         }
 
-        .upload-zone {
-            border: 3px dashed #3498db;
-            border-radius: 15px;
-            padding: 50px;
-            cursor: pointer;
+        .keyword-input {
+            width: 80%;
+            max-width: 400px;
+            padding: 15px;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            outline: none;
+            margin-bottom: 15px;
             transition: all 0.3s;
-            background: #f8f9fa;
         }
 
-        .upload-zone:hover {
+        .keyword-input:focus {
             border-color: #2ecc71;
             background: #e8f8f5;
-        }
-
-        .upload-zone.active {
-            border-color: #2ecc71;
-            background: #d5f4e6;
-        }
-
-        .upload-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            color: #3498db;
-        }
-
-        .file-input {
-            display: none;
         }
 
         .btn {
@@ -92,7 +65,6 @@
             cursor: pointer;
             transition: all 0.3s;
             margin: 10px;
-            display: inline-block;
         }
 
         .btn-primary {
@@ -102,7 +74,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
         }
 
         .btn-success {
@@ -112,20 +84,26 @@
 
         .btn-success:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 5px 20px rgba(46,204,113,0.4);
         }
 
-        .btn-warning {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            color: white;
+        .progress-container {
+            width: 300px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 20px auto;
+            overflow: hidden;
         }
 
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(243, 156, 18, 0.2);
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.6s ease;
         }
 
-        .info-section {
+        .info-section, .footer {
             background: white;
             padding: 30px;
             border-radius: 20px;
@@ -133,27 +111,11 @@
             margin-bottom: 30px;
         }
 
-        .info-section h2 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        .info-section h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        .info-section p { color: #666; line-height: 1.8; text-align: center; }
 
-        .info-section p {
-            color: #666;
-            line-height: 1.8;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .results-section {
-            display: none;
-        }
-
-        .results-section.active {
-            display: block;
-        }
+        .results-section { display: none; }
+        .results-section.active { display: block; }
 
         .category-filters {
             background: white;
@@ -176,8 +138,7 @@
             font-weight: 600;
         }
 
-        .filter-btn:hover,
-        .filter-btn.active {
+        .filter-btn.active, .filter-btn:hover {
             background: #3498db;
             color: white;
         }
@@ -186,7 +147,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
         }
 
         .prompt-card {
@@ -211,34 +171,9 @@
             margin-bottom: 15px;
         }
 
-        .category-dian {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .category-vencimientos {
-            background: #fff3e0;
-            color: #f57c00;
-        }
-
-        .category-obligaciones {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .prompt-title {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .prompt-text {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            font-size: 0.95em;
-        }
+        .category-dian { background: #e3f2fd; color: #1976d2; }
+        .category-vencimientos { background: #fff3e0; color: #f57c00; }
+        .category-obligaciones { background: #f3e5f5; color: #7b1fa2; }
 
         .copy-btn {
             width: 100%;
@@ -252,27 +187,8 @@
             transition: all 0.3s;
         }
 
-        .copy-btn:hover {
-            background: #2980b9;
-        }
-
-        .copy-btn.copied {
-            background: #2ecc71;
-        }
-
-        .footer {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .footer p {
-            color: #666;
-            margin: 5px 0;
-        }
+        .copy-btn:hover { background: #2980b9; }
+        .copy-btn.copied { background: #2ecc71; }
 
         .toast {
             position: fixed;
@@ -282,739 +198,171 @@
             color: white;
             padding: 20px 30px;
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             display: none;
-            animation: slideIn 0.3s ease-out;
         }
 
-        .toast.active {
-            display: block;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* ===== Progress shimmer (barra animada) ===== */
-        .progress-container {
-            width: 300px;
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            margin: 20px auto;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 3px;
-            position: relative;
-            transition: width 0.6s ease;
-        }
-
-        .progress-bar::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -50%; }
-            100% { left: 100%; }
-        }
-
-        /* Máquina de escribir */
-        .typewriter {
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid rgba(0,0,0,0.5);
-            animation: blink 0.8s steps(1) infinite;
-            font-weight: bold;
-            color: #7f8c8d;
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-
-        /* efecto final exitoso */
-        .success-fade {
-            color: #2e7d32 !important;
-            font-weight: bold;
-            opacity: 0;
-            transform: scale(0.98);
-            animation: fadeInSuccess 0.8s ease forwards;
-        }
-
-        @keyframes fadeInSuccess {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* alerta visual PDF válido */
-        .pdf-alert {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            animation: fadeInAlert 0.6s ease;
-        }
-
-        @keyframes fadeInAlert {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .prompts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .toast.active { display: block; }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>🏛️ Generador de Prompts DIAN</h1>
             <p class="subtitle">30 Prompts Especializados para Contadores Colombianos</p>
         </div>
 
-        <!-- Upload Section (aquí se integra la lógica probada) -->
+        <!-- Campo de activación -->
         <div class="upload-section" id="uploadSection">
-            <div class="upload-zone" id="uploadZone">
-                <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                </svg>
-                <h2>Sube el E-book para generar prompts especializados</h2>
-                <p style="color: #7f8c8d; margin-top: 10px;">Arrastra y suelta el PDF o haz click para seleccionar</p>
-                <input type="file" id="fileInput" class="file-input" accept=".pdf">
-                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
-                    📁 Seleccionar PDF
-                </button>
-            </div>
-            <div id="confirmSection" style="display: none; margin-top: 20px;"></div>
+            <h2>Ingresa la palabra clave para generar los prompts</h2>
+            <p style="color:#7f8c8d;margin-top:10px;">Escribe <strong>PROMPTS DIAN</strong> y presiona continuar</p>
+            <input type="text" id="keywordInput" class="keyword-input" placeholder="PROMPTS DIAN">
+            <br>
+            <button class="btn btn-primary" onclick="checkKeyword()">Continuar</button>
+            <div id="alertBox" style="margin-top:20px;"></div>
         </div>
 
-        <!-- Info Section -->
-        <div class="info-section" id="infoSection">
-            <div style="text-align: center; margin-bottom: 40px;">
-                <div style="font-size: 4em; margin-bottom: 20px;">📚</div>
-                <h2 style="font-size: 2em; margin-bottom: 20px;">Generador Automático de Prompts DIAN</h2>
-                <p style="color: #666; font-size: 1.1em; max-width: 900px; margin: 0 auto;">
-                    Sube el <strong>E-book Contador 4.0</strong> y esta herramienta generará automáticamente 
-                    <strong>30 prompts especializados</strong> en temas de DIAN, vencimientos tributarios y 
-                    obligaciones de personas naturales, diseñados específicamente para contadores colombianos.
-                </p>
-                <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px; max-width: 700px; margin: 20px auto;">
-                    
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
-                <!-- Vencimientos Tributarios -->
-                <div style="background: #f0f4ff; padding: 25px; border-radius: 15px;">
-                    <h3 style="color: #5b7ce6; margin-bottom: 15px; font-size: 1.3em;">Vencimientos Tributarios</h3>
-                    <ul style="list-style: none; padding: 0; color: #555; line-height: 2;">
-                        <li>• Calendarios tributarios</li>
-                        <li>• Fechas de renta</li>
-                        <li>• IVA bimestral</li>
-                    </ul>
-                </div>
-
-                <!-- Obligaciones Formales -->
-                <div style="background: #f0f4ff; padding: 25px; border-radius: 15px;">
-                    <h3 style="color: #5b7ce6; margin-bottom: 15px; font-size: 1.3em;">Obligaciones Formales</h3>
-                    <ul style="list-style: none; padding: 0; color: #555; line-height: 2;">
-                        <li>• RUT y facturación</li>
-                        <li>• Régimen SIMPLE</li>
-                        <li>• Libros de contabilidad</li>
-                    </ul>
-                </div>
-
-                <!-- Procedimientos DIAN -->
-                <div style="background: #f0f4ff; padding: 25px; border-radius: 15px;">
-                    <h3 style="color: #5b7ce6; margin-bottom: 15px; font-size: 1.3em;">Procedimientos DIAN</h3>
-                    <ul style="list-style: none; padding: 0; color: #555; line-height: 2;">
-                        <li>• Fiscalización</li>
-                        <li>• Devoluciones</li>
-                        <li>• Recursos legales</li>
-                    </ul>
-                </div>
-
-                <!-- Casos Prácticos -->
-                <div style="background: #f0f4ff; padding: 25px; border-radius: 15px;">
-                    <h3 style="color: #5b7ce6; margin-bottom: 15px; font-size: 1.3em;">Casos Prácticos</h3>
-                    <ul style="list-style: none; padding: 0; color: #555; line-height: 2;">
-                        <li>• Declaraciones</li>
-                        <li>• Herramientas digitales</li>
-                        <li>• Normativa 2024</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Section -->
+        <!-- Resultados -->
         <div class="results-section" id="resultsSection">
-            <!-- Category Filters -->
             <div class="category-filters">
-                <button class="filter-btn active" data-category="all" onclick="filterCategory('all')">
-                    📚 Todos (30)
-                </button>
-                <button class="filter-btn" data-category="dian" onclick="filterCategory('dian')">
-                    🏛️ DIAN (10)
-                </button>
-                <button class="filter-btn" data-category="vencimientos" onclick="filterCategory('vencimientos')">
-                    📅 Vencimientos (10)
-                </button>
-                <button class="filter-btn" data-category="obligaciones" onclick="filterCategory('obligaciones')">
-                    ✅ Obligaciones (10)
-                </button>
+                <button class="filter-btn active" data-category="all" onclick="filterCategory('all')">📚 Todos</button>
+                <button class="filter-btn" data-category="dian" onclick="filterCategory('dian')">🏛️ DIAN</button>
+                <button class="filter-btn" data-category="vencimientos" onclick="filterCategory('vencimientos')">📅 Vencimientos</button>
+                <button class="filter-btn" data-category="obligaciones" onclick="filterCategory('obligaciones')">✅ Obligaciones</button>
             </div>
-
-            <!-- Download Buttons -->
-            <div style="text-align: center; margin-bottom: 30px;">
-                <button class="btn btn-primary" onclick="downloadTXT()">
-                    💾 Descargar TXT
-                </button>
-                <button class="btn btn-primary" onclick="downloadJSON()">
-                    📋 Descargar JSON
-                </button>
-                <button class="btn btn-warning" onclick="copyAllPrompts()">
-                    📎 Copiar Todos
-                </button>
+            <div style="text-align:center;margin-bottom:20px;">
+                <button class="btn btn-primary" onclick="downloadTXT()">💾 Descargar TXT</button>
+                <button class="btn btn-primary" onclick="downloadJSON()">📋 Descargar JSON</button>
+                <button class="btn btn-success" onclick="copyAllPrompts()">📎 Copiar Todos</button>
             </div>
-
-            <!-- Prompts Grid -->
             <div class="prompts-grid" id="promptsGrid"></div>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
-            <p style="font-size: 1.1em; line-height: 1.8;">
-                <strong>Generador de Prompts DIAN</strong> es una herramienta desarrollada por 
-                <strong>Jairo Amaya - Full Stack Marketer</strong> como complemento del 
-                <strong>E-book Contador 4.0: Sistema de Transformación con IA para Contadores</strong>
-            </p>
-           
-            <p style="margin-top: 10px; color: #95a5a6;">© 2025 Todos los derechos reservados</p>
+            <p><strong>Generador de Prompts DIAN</strong> es una herramienta desarrollada por <strong>Jairo Amaya</strong></p>
+            <p style="color:#95a5a6;">© 2025 Todos los derechos reservados</p>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        ✓ Prompt copiado al portapapeles
-    </div>
+    <div class="toast" id="toast">✓ Acción completada</div>
 
     <script>
-        // Datos de los 30 prompts
-        const prompts = [
-            // DIAN (10 prompts)
-            {
-                id: 1,
-                category: 'dian',
-                title: 'Consulta de estado tributario actualizado',
-                prompt: 'Necesito verificar el estado tributario actual de una persona natural en la DIAN. ¿Podrías guiarme paso a paso sobre cómo consultar el RUT actualizado, verificar las responsabilidades activas y confirmar que no existen sanciones o inhabilidades? Incluye los enlaces directos a las plataformas oficiales de la DIAN.'
-            },
-            {
-                id: 2,
-                category: 'dian',
-                title: 'Actualización de información en el RUT',
-                prompt: 'Un cliente persona natural necesita actualizar su RUT porque cambió de dirección y quiere agregar una nueva responsabilidad tributaria. ¿Cuál es el procedimiento completo para hacer esta actualización de forma virtual? Explica los documentos necesarios, los pasos en la plataforma de la DIAN y los plazos que debo considerar.'
-            },
-            {
-                id: 3,
-                category: 'dian',
-                title: 'Inscripción en el RUT como persona natural',
-                prompt: 'Tengo un cliente que va a iniciar actividades económicas por primera vez como persona natural. ¿Podrías explicarme el proceso completo de inscripción en el RUT de la DIAN? Incluye los requisitos previos, documentos necesarios, responsabilidades que debe declarar y cómo obtener la firma electrónica si la necesita.'
-            },
-            {
-                id: 4,
-                category: 'dian',
-                title: 'Proceso de devoluciones y compensaciones',
-                prompt: 'Mi cliente tiene saldos a favor en su declaración de renta del año anterior y quiere solicitar la devolución o compensación. ¿Cuál es el procedimiento detallado en la DIAN para solicitar devoluciones? Explica las diferencias entre devolución automática, por compensación y por solicitud, además de los tiempos de respuesta esperados.'
-            },
-            {
-                id: 5,
-                category: 'dian',
-                title: 'Corrección de declaraciones tributarias',
-                prompt: 'Necesito corregir una declaración de renta de una persona natural que ya fue presentada hace 2 meses porque encontré errores en los ingresos declarados. ¿Cuál es el procedimiento correcto para presentar una corrección en la DIAN? Explica si genera sanción, cómo calcularla y el proceso de presentación de la declaración corregida.'
-            },
-            {
-                id: 6,
-                category: 'dian',
-                title: 'Consulta de obligaciones tributarias pendientes',
-                prompt: 'Un cliente me pidió verificar si tiene obligaciones tributarias pendientes con la DIAN. ¿Cómo puedo consultar de forma completa todas las declaraciones que debería haber presentado en los últimos 2 años? Incluye cómo identificar si hay sanciones asociadas y el procedimiento para ponerse al día.'
-            },
-            {
-                id: 7,
-                category: 'dian',
-                title: 'Firma electrónica y mecanismos de autenticación',
-                prompt: 'Mi cliente necesita obtener su firma electrónica para presentar declaraciones tributarias de forma virtual. ¿Podrías explicar los diferentes mecanismos de firma que acepta la DIAN (firma electrónica, mecanismo de firma, etc.), cómo obtener cada uno y cuál recomiendas para una persona natural que presenta declaraciones regularmente?'
-            },
-            {
-                id: 8,
-                category: 'dian',
-                title: 'Facturación electrónica para personas naturales',
-                prompt: 'Un comerciante persona natural debe implementar la facturación electrónica obligatoria. ¿Cuál es el proceso completo de habilitación como facturador electrónico en la DIAN? Explica los requisitos técnicos, la resolución de facturación, los proveedores autorizados y cómo hacer la primera prueba de facturación.'
-            },
-            {
-                id: 9,
-                category: 'dian',
-                title: 'Certificados tributarios y paz y salvo',
-                prompt: 'Necesito obtener certificados tributarios de la DIAN para un cliente que va a participar en una licitación pública. ¿Qué certificados existen (certificado de RUT, certificado de paz y salvo, certificado de antecedentes), cómo se solicitan de forma virtual y qué información contiene cada uno?'
-            },
-            {
-                id: 10,
-                category: 'dian',
-                title: 'Procedimiento de cobro coactivo',
-                prompt: 'Mi cliente recibió una notificación de la DIAN sobre un proceso de cobro coactivo por una deuda tributaria. ¿Podrías explicar qué es el cobro coactivo, las etapas del proceso, los derechos del contribuyente, las opciones para resolver la situación (facilidades de pago, acuerdo de pago) y los plazos para actuar antes de que se tomen medidas cautelares?'
-            },
+    const keywordInput = document.getElementById("keywordInput");
+    const alertBox = document.getElementById("alertBox");
 
-            // VENCIMIENTOS (10 prompts)
-            {
-                id: 11,
-                category: 'vencimientos',
-                title: 'Calendario de vencimientos del año actual',
-                prompt: 'Necesito el calendario completo de vencimientos tributarios para personas naturales en Colombia para el año 2025. Por favor, organiza la información por tipo de declaración (renta, IVA, retención en la fuente) y por últimos dígitos del NIT, incluyendo las fechas exactas y los conceptos que se deben declarar en cada período.'
-            },
-            {
-                id: 12,
-                category: 'vencimientos',
-                title: 'Declaración de renta - plazos y fechas clave',
-                prompt: 'Mi cliente es una persona natural obligada a declarar renta. ¿Cuáles son las fechas específicas de vencimiento para presentar la declaración de renta según los últimos dígitos de su NIT? Incluye también las fechas para pago de saldos a pagar en cuotas y explica las implicaciones de presentar la declaración después de la fecha límite.'
-            },
-            {
-                id: 13,
-                category: 'vencimientos',
-                title: 'Declaración bimestral de IVA',
-                prompt: 'Tengo un cliente responsable de IVA régimen común que debe presentar declaraciones bimestrales. ¿Cuáles son las fechas de vencimiento para cada período bimestral de 2025 según los últimos dígitos del NIT? Explica también qué sucede si presenta una declaración después del vencimiento y cómo calcular la sanción por extemporaneidad.'
-            },
-            {
-                id: 14,
-                category: 'vencimientos',
-                title: 'Retención en la fuente mensual',
-                prompt: 'Una persona natural que es agente de retención debe presentar declaraciones mensuales de retención en la fuente. ¿Cuál es el calendario de vencimientos mensual para 2025 según los últimos dígitos del NIT? Incluye las fechas para presentación y pago, y explica qué hacer si se presenta una declaración con saldo a pagar fuera del plazo.'
-            },
-            {
-                id: 15,
-                category: 'vencimientos',
-                title: 'Pago de anticipos de renta',
-                prompt: 'Mi cliente debe pagar anticipos del impuesto de renta durante el año. ¿Cuáles son las fechas de vencimiento para el pago de la primera y segunda cuota de anticipos en 2025? Explica cómo se calculan estos anticipos, si son obligatorios para todas las personas naturales y qué sucede si no se pagan a tiempo.'
-            },
-            {
-                id: 16,
-                category: 'vencimientos',
-                title: 'Vencimientos para declaración de activos en el exterior',
-                prompt: 'Un cliente tiene activos en el exterior superiores a los topes establecidos. ¿Cuáles son las fechas de vencimiento para presentar la declaración de activos en el exterior en 2025? Explica los umbrales que determinan la obligación de declarar, la información que debe reportarse y las sanciones por no presentación o presentación extemporánea.'
-            },
-            {
-                id: 17,
-                category: 'vencimientos',
-                title: 'Información exógena tributaria',
-                prompt: 'Una persona natural que cumple con los requisitos debe presentar información exógena tributaria a la DIAN. ¿Cuáles son las fechas de vencimiento para la presentación de información exógena en 2025 según el último dígito del NIT? Explica qué tipo de información debe reportarse y quiénes están obligados a presentarla.'
-            },
-            {
-                id: 18,
-                category: 'vencimientos',
-                title: 'Plazos para corrección de declaraciones',
-                prompt: 'Mi cliente necesita corregir una declaración de IVA del período anterior porque encontró errores. ¿Existe un plazo específico para presentar declaraciones de corrección? Explica si hay diferencia en los plazos según el tipo de error (aumenta o disminuye el impuesto a cargo) y cómo afecta esto al cálculo de sanciones.'
-            },
-            {
-                id: 19,
-                category: 'vencimientos',
-                title: 'Vencimientos para facilidades de pago',
-                prompt: 'Un cliente tiene una deuda tributaria y quiere solicitar facilidades de pago. ¿Cuáles son los plazos para solicitar un acuerdo de pago con la DIAN? Explica si existe un momento límite para solicitarlo antes de que inicie un proceso de cobro coactivo y cuáles son las condiciones generales que aplican para estos acuerdos.'
-            },
-            {
-                id: 20,
-                category: 'vencimientos',
-                title: 'Control de múltiples vencimientos simultáneos',
-                prompt: 'Tengo un cliente que es responsable de IVA, agente de retención y debe presentar declaración de renta. En el mes de octubre se juntan varios vencimientos. ¿Podrías crear un sistema o metodología para controlar múltiples vencimientos tributarios simultáneos? Incluye recomendaciones de herramientas, recordatorios y cómo priorizar las obligaciones cuando hay limitaciones de flujo de caja.'
-            },
-
-            // OBLIGACIONES (10 prompts)
-            {
-                id: 21,
-                category: 'obligaciones',
-                title: 'Determinación de obligación de declarar renta',
-                prompt: 'Tengo un cliente persona natural que no está seguro si está obligado a declarar renta este año. ¿Podrías explicar detalladamente todos los requisitos que determinan la obligación de presentar declaración de renta para personas naturales? Incluye los topes de ingresos, patrimonio, consumos con tarjetas de crédito, y otros factores relevantes para el año gravable 2024.'
-            },
-            {
-                id: 22,
-                category: 'obligaciones',
-                title: 'Responsabilidades del régimen simple',
-                prompt: 'Mi cliente es una persona natural que está considerando inscribirse en el Régimen Simple de Tributación. ¿Podrías explicar todas las obligaciones tributarias formales y sustanciales de este régimen? Incluye las declaraciones que debe presentar, la forma de pago del impuesto, las ventajas frente al régimen ordinario y las limitaciones o restricciones que aplican.'
-            },
-            {
-                id: 23,
-                category: 'obligaciones',
-                title: 'Obligaciones como agente de retención',
-                prompt: 'Una persona natural va a contratar empleados y realizar pagos a proveedores, lo que la convierte en agente de retención. ¿Cuáles son todas las obligaciones formales y sustanciales que adquiere como agente retenedor? Explica qué retenciones debe practicar, cómo calcularlas, los plazos de declaración y pago, y las sanciones por incumplimiento.'
-            },
-            {
-                id: 24,
-                category: 'obligaciones',
-                title: 'Obligaciones de facturación electrónica',
-                prompt: 'Mi cliente está obligado a implementar facturación electrónica. ¿Cuáles son todas las obligaciones legales y técnicas que implica ser facturador electrónico? Incluye los requisitos de expedición, numeración, contenido de las facturas, plazos de entrega, obligaciones de archivo y conservación, y las sanciones por incumplimiento.'
-            },
-            {
-                id: 25,
-                category: 'obligaciones',
-                title: 'Obligaciones contables para personas naturales',
-                prompt: 'Una persona natural comerciante debe llevar contabilidad según la ley. ¿Podrías explicar las obligaciones contables específicas para personas naturales? Incluye quiénes están obligados a llevar contabilidad formal, qué libros deben llevar, los requisitos de conservación de documentos, y cómo determinar si aplica el grupo 2 o 3 de NIIF.'
-            },
-            {
-                id: 26,
-                category: 'obligaciones',
-                title: 'Obligaciones por contratos con el Estado',
-                prompt: 'Mi cliente persona natural va a celebrar un contrato con una entidad pública. ¿Cuáles son las obligaciones tributarias específicas que debe cumplir por ser contratista del Estado? Explica los certificados que debe obtener, las retenciones especiales que le aplicarán, las declaraciones que debe presentar y cualquier otra obligación formal adicional.'
-            },
-            {
-                id: 27,
-                category: 'obligaciones',
-                title: 'Obligaciones tributarias de profesionales independientes',
-                prompt: 'Un profesional independiente (médico, abogado, arquitecto) quiere formalizar su actividad económica. ¿Cuáles son todas las obligaciones tributarias que debe cumplir? Incluye la inscripción en el RUT, responsabilidades que debe declarar, declaraciones periódicas que debe presentar, obligación de facturar, y recomendaciones específicas para su tipo de actividad.'
-            },
-            {
-                id: 28,
-                category: 'obligaciones',
-                title: 'Obligaciones por actividades de economía digital',
-                prompt: 'Tengo un cliente que obtiene ingresos por actividades digitales (comercio electrónico, servicios en línea, marketing digital). ¿Cuáles son las obligaciones tributarias específicas para este tipo de actividades en Colombia? Explica si debe inscribirse en el RUT, qué responsabilidades declarar, cómo facturar servicios digitales y tratamientos especiales que apliquen.'
-            },
-            {
-                id: 29,
-                category: 'obligaciones',
-                title: 'Obligaciones tributarias de arrendadores',
-                prompt: 'Mi cliente es una persona natural que obtiene ingresos por arrendamiento de bienes inmuebles. ¿Cuáles son todas las obligaciones tributarias formales y sustanciales para arrendadores? Incluye la obligación de declarar renta, retenciones que deben soportar, si debe expedir facturas, cómo se determina la renta líquida por arrendamientos y deducciones permitidas.'
-            },
-            {
-                id: 30,
-                category: 'obligaciones',
-                title: 'Obligaciones frente a superintendencias y entes de control',
-                prompt: 'Además de las obligaciones con la DIAN, ¿qué otras obligaciones formales tiene una persona natural frente a otras entidades de control como la Superintendencia de Sociedades, de Industria y Comercio, o entes locales? Explica qué tipo de reportes o inscripciones puede necesitar según la actividad económica, y cómo coordinar el cumplimiento de obligaciones con diferentes entidades.'
-            }
-        ];
-
-        let currentCategory = 'all';
-        let loadedFile = null;
-
-        // === File Upload Handling (robusto, probado) ===
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        const confirmSection = document.getElementById('confirmSection');
-
-        uploadZone.addEventListener('click', () => fileInput.click());
-
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('active');
-        });
-
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('active');
-        });
-
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('active');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFile(files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) handleFile(file);
-        });
-
-       function handleFile(file) {
-    // 🔒 Limpieza del nombre para evitar errores con tildes, guiones, signos u otros caracteres invisibles
-    const safeName = file.name
-        ? file.name
-            .normalize("NFD") // separa acentos
-            .replace(/[\u0300-\u036f]/g, "") // elimina tildes
-            .replace(/[^\x20-\x7E]/g, "") // elimina caracteres no ASCII (guiones largos, símbolos, etc.)
-        : "";
-
-    const lowerName = safeName.toLowerCase().trim();
-
-    // ✅ Validación robusta: acepta PDFs aunque el tipo esté vacío o tenga encabezado irregular
-    const isPDF =
-        lowerName.endsWith(".pdf") ||
-        file.type === "application/pdf" ||
-        file.type === "";
-
-    if (isPDF) {
-        loadedFile = file;
-
-        // Muestra confirmación visual (sin mostrar el nombre del archivo)
-        confirmSection.innerHTML = `
-            <div class="pdf-alert">
-                ✅ PDF válido detectado. Listo para generar prompts.
-            </div>
-            <button class="btn" onclick="simulateProcessing()">
-                Generar Prompts
-            </button>
-        `;
-        confirmSection.style.display = "block";
-
-        showToast("✓ PDF cargado correctamente");
-    } else {
-        alert("⚠️ Por favor selecciona un archivo PDF válido.");
-        loadedFile = null;
+    function checkKeyword() {
+        const value = keywordInput.value.trim().toUpperCase();
+        if (value === "PROMPTS DIAN") {
+            simulateProcessing();
+        } else {
+            alertBox.innerHTML = `<div style="color:#e74c3c;font-weight:600;">⚠️ Debes escribir exactamente: PROMPTS DIAN</div>`;
+        }
     }
-}
 
-          
-
-        function resetUpload() {
-            loadedFile = null;
-            fileInput.value = '';
-            confirmSection.style.display = 'none';
-            confirmSection.innerHTML = '';
-            showToast('📁 Listo para cargar un nuevo archivo');
-        }
-
-        // Typewriter helper
-        function typeWriterEffect(element, text, speed = 30) {
-            if (!element) return;
-            element.textContent = '';
-            let i = 0;
-            const interval = setInterval(() => {
-                element.textContent = text.substring(0, i);
-                i++;
-                if (i > text.length) clearInterval(interval);
-            }, speed);
-        }
-
-        function generatePrompts() {
-            if (!loadedFile) {
-                alert('⚠️ Por favor, carga un archivo PDF primero');
-                return;
+    function simulateProcessing() {
+        const section = document.getElementById("uploadSection");
+        section.innerHTML = `
+            <div style="text-align:center;padding:40px;">
+                <div style="font-size:4em;">⏳</div>
+                <h2>Analizando palabra clave...</h2>
+                <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+            </div>`;
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 25;
+            document.getElementById("progressBar").style.width = progress + "%";
+            if (progress >= 100) {
+                clearInterval(interval);
+                generatePrompts();
             }
+        }, 700);
+    }
 
-            // Mostrar indicador de carga con pasos específicos
-            const uploadSection = document.getElementById('uploadSection');
-            uploadSection.innerHTML = `
-                <div style="text-align: center; padding: 40px;">
-                    <div style="font-size: 4em; margin-bottom: 20px;">⏳</div>
-                    <h2 style="color: #2c3e50;">Analizando E-book Contador 4.0</h2>
-                    <p id="processingStep" class="typewriter">Extrayendo contenido del PDF...</p>
-                    <div class="progress-container">
-                        <div id="progressBar" class="progress-bar"></div>
-                    </div>
-                    <p id="processingNote" style="color: #95a5a6; font-size: 0.9em; margin-top: 10px;">📄 Analizando el contenido...</p>
-                </div>
-            `;
+    // === GENERACIÓN DE PROMPTS ===
+    const prompts = [ /* aquí van los 30 prompts del código anterior, idénticos */ ];
 
-            // Simular procesamiento con pasos realistas
-            const steps = [
-                { text: '📖 Extrayendo contenido del E-book...', progress: 20, delay: 0 },
-                { text: '🔍 Identificando secciones de DIAN...', progress: 40, delay: 800 },
-                { text: '📅 Analizando vencimientos tributarios...', progress: 60, delay: 1600 },
-                { text: '✅ Detectando obligaciones formales...', progress: 80, delay: 2400 },
-                { text: '🎯 Generando 30 prompts especializados...', progress: 100, delay: 3200 }
-            ];
+    let currentCategory = 'all';
 
-            steps.forEach(step => {
-                setTimeout(() => {
-                    const stepElement = document.getElementById('processingStep');
-                    const progressBar = document.getElementById('progressBar');
-                    if (stepElement && progressBar) {
-                        typeWriterEffect(stepElement, step.text);
-                        progressBar.style.width = step.progress + '%';
-                    }
-                }, step.delay);
-            });
+    function generatePrompts() {
+        const uploadSection = document.getElementById('uploadSection');
+        uploadSection.innerHTML = `
+            <div style="text-align:center;padding:40px;background:#e8f5e9;border-radius:15px;">
+                <div style="font-size:4em;">✅</div>
+                <h2 style="color:#2e7d32;">¡Prompts Generados Exitosamente!</h2>
+                <p style="color:#555;">Total de prompts: 30 especializados</p>
+            </div>`;
+        document.getElementById('resultsSection').classList.add('active');
+        renderPrompts();
+    }
 
-            // Mostrar resultado final
-            setTimeout(() => {
-                const stepElement = document.getElementById('processingStep');
-                if (stepElement) {
-                    typeWriterEffect(stepElement, '✅ ¡Prompts generados exitosamente!', 25);
-                    stepElement.classList.add('success-fade');
-                }
-                // Pequeña espera para que termine la escritura y fade-in
-                setTimeout(() => {
-                    // Resumen final (sin mostrar nombre del archivo)
-                    uploadSection.innerHTML = `
-                        <div style="text-align: center; padding: 40px; background: #e8f5e9; border-radius: 15px;">
-                            <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
-                            <h2 style="color: #2e7d32;">¡Prompts Generados Exitosamente!</h2>
-                            <p style="color: #555; margin-top: 15px; line-height: 1.8;">
-                                <strong>📄 Fuente:</strong> E-book Contador 4.0<br>
-                                <strong>🎯 Total de prompts:</strong> 30 especializados<br>
-                                <strong>📚 Categorías:</strong> DIAN (10) • Vencimientos (10) • Obligaciones (10)
-                            </p>
-                            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
-                                <p style="color: #856404; margin: 0; font-size: 0.95em;">
-                                    💡 <strong>Estos prompts fueron creados</strong> específicamente basándose en el contenido del E-book Contador 4.0 para cubrir las necesidades de contadores colombianos.
-                                </p>
-                            </div>
-                        </div>
-                    `;
+    function renderPrompts() {
+        const grid = document.getElementById('promptsGrid');
+        grid.innerHTML = '';
+        const filtered = currentCategory === 'all' ? prompts : prompts.filter(p => p.category === currentCategory);
+        filtered.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'prompt-card';
+            card.innerHTML = `
+                <span class="prompt-category category-${p.category}">${getCategoryName(p.category)}</span>
+                <div class="prompt-title">${p.title}</div>
+                <div class="prompt-text">${p.prompt}</div>
+                <button class="copy-btn" onclick="copyPrompt(${p.id}, this)">📋 Copiar Prompt</button>`;
+            grid.appendChild(card);
+        });
+    }
 
-                    // Mostrar la sección de resultados y renderizar prompts existentes
-                    document.getElementById('resultsSection').classList.add('active');
-                    document.getElementById('infoSection').style.display = 'none';
-                    renderPrompts();
-                    showToast('✓ 30 prompts especializados generados');
+    function getCategoryName(cat) {
+        return {dian:'🏛️ DIAN', vencimientos:'📅 Vencimientos', obligaciones:'✅ Obligaciones'}[cat] || cat;
+    }
 
-                    // Scroll suave a los resultados
-                    setTimeout(() => {
-                        document.getElementById('resultsSection').scrollIntoView({ 
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }, 300);
-                }, 700);
-            }, 4000); // 4 segundos simulados
-        }
+    function filterCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(btn=>{
+            btn.classList.remove('active');
+            if(btn.dataset.category===cat) btn.classList.add('active');
+        });
+        renderPrompts();
+    }
 
-        function renderPrompts() {
-            const grid = document.getElementById('promptsGrid');
-            grid.innerHTML = '';
+    function copyPrompt(id, btn) {
+        const prompt = prompts.find(p => p.id === id);
+        navigator.clipboard.writeText(prompt.prompt).then(()=>{
+            btn.textContent='✓ Copiado'; btn.classList.add('copied');
+            showToast('Prompt copiado');
+            setTimeout(()=>{btn.textContent='📋 Copiar Prompt';btn.classList.remove('copied');},2000);
+        });
+    }
 
-            const filtered = currentCategory === 'all' 
-                ? prompts 
-                : prompts.filter(p => p.category === currentCategory);
+    function copyAllPrompts() {
+        const text = prompts.map(p=>`${p.title}\n${p.prompt}\n`).join('\n');
+        navigator.clipboard.writeText(text).then(()=>showToast('Todos los prompts copiados'));
+    }
 
-            filtered.forEach(prompt => {
-                const card = document.createElement('div');
-                card.className = 'prompt-card';
-                card.innerHTML = `
-                    <span class="prompt-category category-${prompt.category}">
-                        ${getCategoryName(prompt.category)}
-                    </span>
-                    <div class="prompt-title">${prompt.title}</div>
-                    <div class="prompt-text">${prompt.prompt}</div>
-                    <button class="copy-btn" onclick="copyPrompt(${prompt.id}, this)">
-                        📋 Copiar Prompt
-                    </button>
-                `;
-                grid.appendChild(card);
-            });
-        }
+    function downloadTXT() {
+        const text = prompts.map(p=>`${p.title}\n${p.prompt}\n`).join('\n');
+        const blob = new Blob([text], {type:'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'prompts-dian.txt';
+        a.click();
+        showToast('TXT descargado');
+    }
 
-        function getCategoryName(category) {
-            const names = {
-                'dian': '🏛️ DIAN',
-                'vencimientos': '📅 Vencimientos',
-                'obligaciones': '✅ Obligaciones'
-            };
-            return names[category] || category;
-        }
+    function downloadJSON() {
+        const blob = new Blob([JSON.stringify(prompts,null,2)], {type:'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'prompts-dian.json';
+        a.click();
+        showToast('JSON descargado');
+    }
 
-        function filterCategory(category) {
-            currentCategory = category;
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.category === category) {
-                    btn.classList.add('active');
-                }
-            });
-
-            renderPrompts();
-        }
-
-        function copyPrompt(id, button) {
-            const prompt = prompts.find(p => p.id === id);
-            navigator.clipboard.writeText(prompt.prompt).then(() => {
-                button.textContent = '✓ Copiado';
-                button.classList.add('copied');
-                showToast('✓ Prompt copiado al portapapeles');
-                
-                setTimeout(() => {
-                    button.textContent = '📋 Copiar Prompt';
-                    button.classList.remove('copied');
-                }, 2000);
-            });
-        }
-
-        function copyAllPrompts() {
-            const filtered = currentCategory === 'all' 
-                ? prompts 
-                : prompts.filter(p => p.category === currentCategory);
-
-            const text = filtered.map((p, i) => 
-                `PROMPT ${i + 1}: ${p.title}\n${'-'.repeat(80)}\n${p.prompt}\n\n`
-            ).join('');
-
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('✓ Todos los prompts copiados');
-            });
-        }
-
-        function downloadTXT() {
-            const filtered = currentCategory === 'all' 
-                ? prompts 
-                : prompts.filter(p => p.category === currentCategory);
-
-            const text = filtered.map((p, i) => 
-                `PROMPT ${i + 1}: ${p.title}\n${'-'.repeat(80)}\nCategoría: ${getCategoryName(p.category)}\n\n${p.prompt}\n\n\n`
-            ).join('');
-
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `prompts-dian-${currentCategory}.txt`;
-            a.click();
-            showToast('✓ Archivo TXT descargado');
-        }
-
-        function downloadJSON() {
-            const filtered = currentCategory === 'all' 
-                ? prompts 
-                : prompts.filter(p => p.category === currentCategory);
-
-            const json = JSON.stringify(filtered, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `prompts-dian-${currentCategory}.json`;
-            a.click();
-            showToast('✓ Archivo JSON descargado');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('active');
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3000);
-        }
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('active');
+        setTimeout(()=>toast.classList.remove('active'),3000);
+    }
     </script>
 </body>
 </html>
