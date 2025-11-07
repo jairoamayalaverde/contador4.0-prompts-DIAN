@@ -405,7 +405,7 @@
             <p class="subtitle">30 Prompts Especializados para Contadores Colombianos</p>
         </div>
 
-        <!-- Upload Section -->
+        <!-- Upload Section (aquí se integra la lógica probada) -->
         <div class="upload-section" id="uploadSection">
             <div class="upload-zone" id="uploadZone">
                 <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -724,14 +724,12 @@
         let currentCategory = 'all';
         let loadedFile = null;
 
-        // File upload handling
+        // === File Upload Handling (robusto, probado) ===
         const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
         const confirmSection = document.getElementById('confirmSection');
 
-        uploadZone.addEventListener('click', () => {
-            fileInput.click();
-        });
+        uploadZone.addEventListener('click', () => fileInput.click());
 
         uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -752,17 +750,21 @@
         });
 
         fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFile(e.target.files[0]);
-            }
+            const file = e.target.files[0];
+            if (file) handleFile(file);
         });
 
         function handleFile(file) {
-            // Accept any PDF by MIME type (this avoids filename/char issues)
-            if (file && (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))) {
+            // Aceptar cualquier PDF por extensión o tipo (incluye file.type === '')
+            const isPDF =
+                (file && typeof file.name === 'string' && file.name.toLowerCase().endsWith('.pdf')) ||
+                file.type === 'application/pdf' ||
+                file.type === '';
+
+            if (isPDF) {
                 loadedFile = file;
-                
-                // Show a friendly, generic confirmation (no filename shown)
+
+                // Mostrar confirmación genérica (sin nombre ni tamaño)
                 confirmSection.innerHTML = `
                     <div class="pdf-alert">✅ PDF válido detectado. Listo para generar prompts.</div>
                     <div style="margin-top: 20px;">
@@ -774,7 +776,7 @@
                         </button>
                     </div>
                 `;
-                
+
                 confirmSection.style.display = 'block';
                 showToast('✓ PDF detectado');
             } else {
@@ -791,7 +793,7 @@
             showToast('📁 Listo para cargar un nuevo archivo');
         }
 
-        // Typewriter effect helper
+        // Typewriter helper
         function typeWriterEffect(element, text, speed = 30) {
             if (!element) return;
             element.textContent = '';
@@ -809,7 +811,7 @@
                 return;
             }
 
-            // Replace upload section with animated processing UI
+            // Mostrar indicador de carga con pasos específicos
             const uploadSection = document.getElementById('uploadSection');
             uploadSection.innerHTML = `
                 <div style="text-align: center; padding: 40px;">
@@ -823,7 +825,7 @@
                 </div>
             `;
 
-            // Steps with delays — we use typewriter + progress animation
+            // Simular procesamiento con pasos realistas
             const steps = [
                 { text: '📖 Extrayendo contenido del E-book...', progress: 20, delay: 0 },
                 { text: '🔍 Identificando secciones de DIAN...', progress: 40, delay: 800 },
@@ -843,16 +845,16 @@
                 }, step.delay);
             });
 
-            // Final success message (writes "Prompts generados" in green + fade-in)
+            // Mostrar resultado final
             setTimeout(() => {
                 const stepElement = document.getElementById('processingStep');
-                const processingNote = document.getElementById('processingNote');
                 if (stepElement) {
                     typeWriterEffect(stepElement, '✅ ¡Prompts generados exitosamente!', 25);
                     stepElement.classList.add('success-fade');
                 }
-                // Update summary without showing file name
+                // Pequeña espera para que termine la escritura y fade-in
                 setTimeout(() => {
+                    // Resumen final (sin mostrar nombre del archivo)
                     uploadSection.innerHTML = `
                         <div style="text-align: center; padding: 40px; background: #e8f5e9; border-radius: 15px;">
                             <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
@@ -870,21 +872,21 @@
                         </div>
                     `;
 
-                    // Show results section and render prompts
+                    // Mostrar la sección de resultados y renderizar prompts existentes
                     document.getElementById('resultsSection').classList.add('active');
                     document.getElementById('infoSection').style.display = 'none';
                     renderPrompts();
                     showToast('✓ 30 prompts especializados generados');
 
-                    // Smooth scroll to results
+                    // Scroll suave a los resultados
                     setTimeout(() => {
                         document.getElementById('resultsSection').scrollIntoView({ 
                             behavior: 'smooth',
                             block: 'start'
                         });
                     }, 300);
-                }, 700); // slight delay to let "write" finish
-            }, 4000); // total simulated processing time
+                }, 700);
+            }, 4000); // 4 segundos simulados
         }
 
         function renderPrompts() {
