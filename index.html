@@ -754,36 +754,45 @@
             if (file) handleFile(file);
         });
 
-        function handleFile(file) {
-            // Aceptar cualquier PDF por extensión o tipo (incluye file.type === '')
-            const isPDF =
-                (file && typeof file.name === 'string' && file.name.toLowerCase().endsWith('.pdf')) ||
-                file.type === 'application/pdf' ||
-                file.type === '';
+       function handleFile(file) {
+    // 🔒 Limpieza del nombre para evitar errores con tildes, guiones, signos u otros caracteres invisibles
+    const safeName = file.name
+        ? file.name
+            .normalize("NFD") // separa acentos
+            .replace(/[\u0300-\u036f]/g, "") // elimina tildes
+            .replace(/[^\x20-\x7E]/g, "") // elimina caracteres no ASCII (guiones largos, símbolos, etc.)
+        : "";
 
-            if (isPDF) {
-                loadedFile = file;
+    const lowerName = safeName.toLowerCase().trim();
 
-                // Mostrar confirmación genérica (sin nombre ni tamaño)
-                confirmSection.innerHTML = `
-                    <div class="pdf-alert">✅ PDF válido detectado. Listo para generar prompts.</div>
-                    <div style="margin-top: 20px;">
-                        <button class="btn btn-success" onclick="generatePrompts()">
-                            ✓ Confirmar y generar prompts
-                        </button>
-                        <button class="btn btn-warning" onclick="resetUpload()" style="margin-left: 10px;">
-                            🔄 Cargar otro PDF
-                        </button>
-                    </div>
-                `;
+    // ✅ Validación robusta: acepta PDFs aunque el tipo esté vacío o tenga encabezado irregular
+    const isPDF =
+        lowerName.endsWith(".pdf") ||
+        file.type === "application/pdf" ||
+        file.type === "";
 
-                confirmSection.style.display = 'block';
-                showToast('✓ PDF detectado');
-            } else {
-                alert('⚠️ Por favor, selecciona un archivo PDF válido.\n\nFormato detectado: ' + (file ? file.type || 'desconocido' : 'ninguno'));
-                loadedFile = null;
-            }
-        }
+    if (isPDF) {
+        loadedFile = file;
+
+        // Muestra confirmación visual (sin mostrar el nombre del archivo)
+        confirmSection.innerHTML = `
+            <div class="pdf-alert">
+                ✅ PDF válido detectado. Listo para generar prompts.
+            </div>
+            <button class="btn" onclick="simulateProcessing()">
+                Generar Prompts
+            </button>
+        `;
+        confirmSection.style.display = "block";
+
+        showToast("✓ PDF cargado correctamente");
+    } else {
+        alert("⚠️ Por favor selecciona un archivo PDF válido.");
+        loadedFile = null;
+    }
+}
+
+          
 
         function resetUpload() {
             loadedFile = null;
