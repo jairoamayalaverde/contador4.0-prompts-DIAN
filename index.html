@@ -120,6 +120,11 @@
             color: white;
         }
 
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(243, 156, 18, 0.2);
+        }
+
         .info-section {
             background: white;
             padding: 30px;
@@ -297,13 +302,88 @@
             }
         }
 
-        @keyframes loading {
-            0% {
-                transform: translateX(-100%);
+        /* ===== Progress shimmer (barra animada) ===== */
+        .progress-container {
+            width: 300px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+            position: relative;
+            transition: width 0.6s ease;
+        }
+
+        .progress-bar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        /* Máquina de escribir */
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid rgba(0,0,0,0.5);
+            animation: blink 0.8s steps(1) infinite;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* efecto final exitoso */
+        .success-fade {
+            color: #2e7d32 !important;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0.98);
+            animation: fadeInSuccess 0.8s ease forwards;
+        }
+
+        @keyframes fadeInSuccess {
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
-            100% {
-                transform: translateX(100%);
-            }
+        }
+
+        /* alerta visual PDF válido */
+        .pdf-alert {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: fadeInAlert 0.6s ease;
+        }
+
+        @keyframes fadeInAlert {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
@@ -678,23 +758,16 @@
         });
 
         function handleFile(file) {
-            if (file.type === 'application/pdf') {
+            // Accept any PDF by MIME type (this avoids filename/char issues)
+            if (file && (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))) {
                 loadedFile = file;
                 
-                // Mostrar información del archivo
-                const fileInfo = `
-                    <div style="background: #e8f5e9; padding: 20px; border-radius: 10px; margin-top: 20px;">
-                        <h3 style="color: #2e7d32; margin-bottom: 10px;">📄 Archivo Cargado</h3>
-                        <p style="color: #555; margin: 5px 0;"><strong>Nombre:</strong> ${file.name}</p>
-                        <p style="color: #555; margin: 5px 0;"><strong>Tamaño:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                        <p style="color: #555; margin: 5px 0;"><strong>Tipo:</strong> ${file.type}</p>
-                    </div>
-                `;
-                
-                confirmSection.innerHTML = fileInfo + `
+                // Show a friendly, generic confirmation (no filename shown)
+                confirmSection.innerHTML = `
+                    <div class="pdf-alert">✅ PDF válido detectado. Listo para generar prompts.</div>
                     <div style="margin-top: 20px;">
                         <button class="btn btn-success" onclick="generatePrompts()">
-                            ✓ Confirmar que es el PDF correcto y generar prompts
+                            ✓ Confirmar y generar prompts
                         </button>
                         <button class="btn btn-warning" onclick="resetUpload()" style="margin-left: 10px;">
                             🔄 Cargar otro PDF
@@ -703,9 +776,9 @@
                 `;
                 
                 confirmSection.style.display = 'block';
-                showToast('✓ PDF cargado correctamente: ' + file.name);
+                showToast('✓ PDF detectado');
             } else {
-                alert('⚠️ Por favor, selecciona un archivo PDF válido.\n\nFormato detectado: ' + file.type);
+                alert('⚠️ Por favor, selecciona un archivo PDF válido.\n\nFormato detectado: ' + (file ? file.type || 'desconocido' : 'ninguno'));
                 loadedFile = null;
             }
         }
@@ -718,29 +791,41 @@
             showToast('📁 Listo para cargar un nuevo archivo');
         }
 
+        // Typewriter effect helper
+        function typeWriterEffect(element, text, speed = 30) {
+            if (!element) return;
+            element.textContent = '';
+            let i = 0;
+            const interval = setInterval(() => {
+                element.textContent = text.substring(0, i);
+                i++;
+                if (i > text.length) clearInterval(interval);
+            }, speed);
+        }
+
         function generatePrompts() {
             if (!loadedFile) {
                 alert('⚠️ Por favor, carga un archivo PDF primero');
                 return;
             }
 
-            // Mostrar indicador de carga con pasos específicos
+            // Replace upload section with animated processing UI
             const uploadSection = document.getElementById('uploadSection');
             uploadSection.innerHTML = `
                 <div style="text-align: center; padding: 40px;">
                     <div style="font-size: 4em; margin-bottom: 20px;">⏳</div>
                     <h2 style="color: #2c3e50;">Analizando E-book Contador 4.0</h2>
-                    <p id="processingStep" style="color: #7f8c8d; margin-top: 10px; font-weight: bold;">Extrayendo contenido del PDF...</p>
-                    <div style="width: 300px; height: 6px; background: #e0e0e0; border-radius: 3px; margin: 20px auto; overflow: hidden;">
-                        <div id="progressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.5s;"></div>
+                    <p id="processingStep" class="typewriter">Extrayendo contenido del PDF...</p>
+                    <div class="progress-container">
+                        <div id="progressBar" class="progress-bar"></div>
                     </div>
-                    <p style="color: #95a5a6; font-size: 0.9em; margin-top: 10px;">📄 Procesando: ${loadedFile.name}</p>
+                    <p id="processingNote" style="color: #95a5a6; font-size: 0.9em; margin-top: 10px;">📄 Analizando el contenido...</p>
                 </div>
             `;
 
-            // Simular procesamiento con pasos realistas
+            // Steps with delays — we use typewriter + progress animation
             const steps = [
-                { text: '📖 Extrayendo contenido del PDF...', progress: 20, delay: 0 },
+                { text: '📖 Extrayendo contenido del E-book...', progress: 20, delay: 0 },
                 { text: '🔍 Identificando secciones de DIAN...', progress: 40, delay: 800 },
                 { text: '📅 Analizando vencimientos tributarios...', progress: 60, delay: 1600 },
                 { text: '✅ Detectando obligaciones formales...', progress: 80, delay: 2400 },
@@ -752,44 +837,54 @@
                     const stepElement = document.getElementById('processingStep');
                     const progressBar = document.getElementById('progressBar');
                     if (stepElement && progressBar) {
-                        stepElement.textContent = step.text;
+                        typeWriterEffect(stepElement, step.text);
                         progressBar.style.width = step.progress + '%';
                     }
                 }, step.delay);
             });
 
-            // Mostrar resultado final
+            // Final success message (writes "Prompts generados" in green + fade-in)
             setTimeout(() => {
-                uploadSection.innerHTML = `
-                    <div style="text-align: center; padding: 40px; background: #e8f5e9; border-radius: 15px;">
-                        <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
-                        <h2 style="color: #2e7d32;">¡Prompts Generados Exitosamente!</h2>
-                        <p style="color: #555; margin-top: 15px; line-height: 1.8;">
-                            <strong>📄 Fuente:</strong> ${loadedFile.name}<br>
-                            <strong>🎯 Total de prompts:</strong> 30 especializados<br>
-                            <strong>📚 Categorías:</strong> DIAN (10) • Vencimientos (10) • Obligaciones (10)
-                        </p>
-                        <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
-                            <p style="color: #856404; margin: 0; font-size: 0.95em;">
-                                💡 <strong>Estos prompts fueron creados</strong> específicamente basándose en el contenido del E-book Contador 4.0 para cubrir las necesidades de contadores colombianos.
-                            </p>
-                        </div>
-                    </div>
-                `;
-
-                document.getElementById('resultsSection').classList.add('active');
-                document.getElementById('infoSection').style.display = 'none';
-                renderPrompts();
-                showToast('✓ 30 prompts especializados generados desde el PDF');
-                
-                // Scroll suave a los resultados
+                const stepElement = document.getElementById('processingStep');
+                const processingNote = document.getElementById('processingNote');
+                if (stepElement) {
+                    typeWriterEffect(stepElement, '✅ ¡Prompts generados exitosamente!', 25);
+                    stepElement.classList.add('success-fade');
+                }
+                // Update summary without showing file name
                 setTimeout(() => {
-                    document.getElementById('resultsSection').scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }, 300);
-            }, 4000); // 4 segundos para completar todos los pasos
+                    uploadSection.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: #e8f5e9; border-radius: 15px;">
+                            <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
+                            <h2 style="color: #2e7d32;">¡Prompts Generados Exitosamente!</h2>
+                            <p style="color: #555; margin-top: 15px; line-height: 1.8;">
+                                <strong>📄 Fuente:</strong> E-book Contador 4.0<br>
+                                <strong>🎯 Total de prompts:</strong> 30 especializados<br>
+                                <strong>📚 Categorías:</strong> DIAN (10) • Vencimientos (10) • Obligaciones (10)
+                            </p>
+                            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+                                <p style="color: #856404; margin: 0; font-size: 0.95em;">
+                                    💡 <strong>Estos prompts fueron creados</strong> específicamente basándose en el contenido del E-book Contador 4.0 para cubrir las necesidades de contadores colombianos.
+                                </p>
+                            </div>
+                        </div>
+                    `;
+
+                    // Show results section and render prompts
+                    document.getElementById('resultsSection').classList.add('active');
+                    document.getElementById('infoSection').style.display = 'none';
+                    renderPrompts();
+                    showToast('✓ 30 prompts especializados generados');
+
+                    // Smooth scroll to results
+                    setTimeout(() => {
+                        document.getElementById('resultsSection').scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 300);
+                }, 700); // slight delay to let "write" finish
+            }, 4000); // total simulated processing time
         }
 
         function renderPrompts() {
